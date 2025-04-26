@@ -29,9 +29,9 @@
 #include <console.h>
 #include <ntp.h>
 #include <mqtt.h>
+#include <peripherals.h>
 #include <global.h>
 #include <ota.h>
-#include <peripherals.h>
 #include <hassio.h>
 #ifndef ESP8285
     #include <web.h>

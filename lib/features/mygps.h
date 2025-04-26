@@ -6,7 +6,7 @@
 #define Re_Acqu_Start 1000                          // Typically <1000  msec fix time from Re-Acquisition
 #define AGPS_Start 10000                            // Typically <10000 msec fix time using Assisted GPS
 
-#define GPS_WEB                                     // Flag to load GPS Page on WEB Service
+#define GPS_Enabled                                 // Flag to enable GPS feature on WEB Service, telemetry, etc.
 #define GPS_cycle 1100                              // Setting 1000 milisecond by default -- it Depends on what's configured on GPS module!
 #define GPS_Update 10                               // Value (in Seconds) to update GPS Data variables
 #define GPSBaud 9600                                // GPS Serial baudrate

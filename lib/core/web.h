@@ -90,7 +90,7 @@ String urldecode(String input) // (based on https://code.google.com/p/avr-netino
 #ifdef Modem_WEB_TELNET
   #include "Page_Modem.h"
 #endif
-#ifdef GPS_WEB
+#ifdef GPS_Enabled
   #include "Page_GPS.h"
 #endif
 

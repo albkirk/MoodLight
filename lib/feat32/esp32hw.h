@@ -224,24 +224,32 @@ void esp_deepsleep(unsigned long Time_seconds = 0, unsigned long currUTime = 0) 
     preferences.end();
 
   // Configure Wake Up
-#ifndef ESP32C3
-    if ( Ext1WakeUP>=0 && (Time_seconds == 0 || Time_seconds > 300 ) ) {
-        const uint64_t ext1_wakeup_pin_1_mask = 1ULL << Ext1WakeUP;      // -1 Warning during compilling
-        //const uint64_t ext1_wakeup_pin_1_mask = Ext1WakeUP;
-        esp_sleep_enable_ext1_wakeup(ext1_wakeup_pin_1_mask, ESP_EXT1_WAKEUP_ALL_LOW);
-//  Example using two PINs for external Wake UP 
-//      const int ext_wakeup_pin_1 = 2;
-//      const uint64_t ext_wakeup_pin_1_mask = 1ULL << ext_wakeup_pin_1;
-//      const int ext_wakeup_pin_2 = 4;
-//      const uint64_t ext_wakeup_pin_2_mask = 1ULL << ext_wakeup_pin_2;
-//      printf("Enabling EXT1 wakeup on pins GPIO%d, GPIO%d\n", ext_wakeup_pin_1, ext_wakeup_pin_2);
-//      esp_sleep_enable_ext1_wakeup(ext_wakeup_pin_1_mask | ext_wakeup_pin_2_mask, ESP_EXT1_WAKEUP_ANY_HIGH);
-    }
-#else
-    if ( Ext1WakeUP>=0 && (Time_seconds == 0 || Time_seconds > 300) ) {
-        const uint64_t ext1_wakeup_pin_1_mask = 1ULL << Ext1WakeUP;      // -1 Warning during compilling
-        esp_deep_sleep_enable_gpio_wakeup(ext1_wakeup_pin_1_mask, ESP_GPIO_WAKEUP_GPIO_LOW);  //ESP_GPIO_WAKEUP_GPIO_LOW , ESP_GPIO_WAKEUP_GPIO_HIGH
-    }
+#if Ext1WakeUP >= 0
+    #ifdef ESP32C3
+        if ( Ext1WakeUP>=0 && (Time_seconds == 0 || Time_seconds > 300) ) {
+            const uint64_t ext1_wakeup_pin_1_mask = 1ULL << Ext1WakeUP;      // -1 Warning during compilling
+            esp_deep_sleep_enable_gpio_wakeup(ext1_wakeup_pin_1_mask, ESP_GPIO_WAKEUP_GPIO_LOW);  //ESP_GPIO_WAKEUP_GPIO_LOW , ESP_GPIO_WAKEUP_GPIO_HIGH
+        }
+    #else
+        if ( Ext1WakeUP>=0 && (Time_seconds == 0 || Time_seconds > 300 ) ) {
+
+            esp_sleep_enable_ext0_wakeup(gpio_num_t(Ext1WakeUP), !Ext1WakeUP_OFF); // Ext1WakeUP_OFF = LOW or HIGH
+/*
+FOR MULTIPLE PINS WakeUP use:            
+            const uint64_t ext1_wakeup_pin_1_mask = 1ULL << Ext1WakeUP;      // -1 Warning during compilling
+            //const uint64_t ext1_wakeup_pin_1_mask = Ext1WakeUP;
+            esp_sleep_enable_ext1_wakeup(ext1_wakeup_pin_1_mask, ESP_EXT1_WAKEUP_ALL_LOW);      // use ONE or THE OTHER!!
+            // esp_sleep_enable_ext1_wakeup(ext1_wakeup_pin_1_mask, ESP_EXT1_WAKEUP_ANY_HIGH);  // use ONE or THE OTHER!!
+    //  Example using two PINs for external Wake UP 
+    //      const int ext_wakeup_pin_1 = 2;
+    //      const uint64_t ext_wakeup_pin_1_mask = 1ULL << ext_wakeup_pin_1;
+    //      const int ext_wakeup_pin_2 = 4;
+    //      const uint64_t ext_wakeup_pin_2_mask = 1ULL << ext_wakeup_pin_2;
+    //      printf("Enabling EXT1 wakeup on pins GPIO%d, GPIO%d\n", ext_wakeup_pin_1, ext_wakeup_pin_2);
+    //      esp_sleep_enable_ext1_wakeup(ext_wakeup_pin_1_mask | ext_wakeup_pin_2_mask, ESP_EXT1_WAKEUP_ANY_HIGH);
+*/
+        }
+    #endif
 #endif
 
 #ifdef ULP_Support
@@ -271,7 +279,7 @@ float ReadVoltage(){
     weighted_reading = -0.000000000000016 * pow(reading,4) + 0.000000000118171 * pow(reading,3)- 0.000000301211691 * pow(reading,2)+ 0.001109019271794 * reading + 0.034143524634089;
     // Added an improved polynomial, use either, comment out as required
     // https://github.com/G6EJD/ESP32-ADC-Accuracy-Improvement-function/blob/master/ESP32_ADC_Read_Voltage_Accurate.ino
-    if(Res_Div) return weighted_reading * Res_High / Res_Lower + weighted_reading;
+    if(Batt_Res_Div) return weighted_reading * Batt_Res_High / Batt_Res_Lower + weighted_reading;
     else return weighted_reading;
 }
 

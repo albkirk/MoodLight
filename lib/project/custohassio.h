@@ -3,13 +3,19 @@
 // NOTE! entity and device_class must be lowecased, except "None"
 
 void custo_hassio_disc(){
-//    config_entity("switch","None","DEEPSLEEP","",true);
+    config_entity("light","None","Light","RGB");
+    config_entity("switch","None","DEEPSLEEP","",true);
+    config_entity("number","None","SLEEPTime");     // Slide to control the DeepSleep time
+    config_entity("number","None","ONTime");        // Slide to control the ON time
 //    config_entity("switch","None","Switch_Def","",true);
 //    config_trigger("PushButton");
 }
 
 void custo_hassio_del(){
-//    delete_entity("switch", "None", "DEEPSLEEP");
+    delete_entity("light","None","Light","RGB");
+    delete_entity("switch", "None", "DEEPSLEEP");
+    delete_entity("number", "None", "SLEEPTime");   // Slide to control the DeepSleep time
+    delete_entity("number", "None", "ONTime");      // Slide to control the ON time
 //    delete_entity("switch","","Switch_Def");
 //    delete_trigger("PushButton");
 }

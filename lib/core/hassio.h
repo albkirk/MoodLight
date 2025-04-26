@@ -103,7 +103,8 @@ void config_entity(String entity, String device_class, String param = "", String
         discovery_doc["name"]           = param.c_str();        // until 23.07 ChipID + ' ' + param;
     }
 
-    if(entity == "sensor" && param == "Status") hassio_device();    //Only Status Sensor gets the device complete description
+    // Device identification 
+    if(entity == "sensor" && param == "Status") hassio_device();    //Only the Sensor "Status" sends the complete device description
     else hassio_ids();
     discovery_doc["dev"]                = device_doc;
 
@@ -202,6 +203,7 @@ void config_entity(String entity, String device_class, String param = "", String
             discovery_doc["val_tpl"]      = "{{ value_json.Humidity | float }}";
         }
 
+        // Using a param, to be combined with a device class "None"
         if(param == "HumVelocity") {
             discovery_doc["unit_of_meas"] = "%/min";
             discovery_doc["val_tpl"]      = "{{ value_json.HumVelocity | float }}";
@@ -209,7 +211,12 @@ void config_entity(String entity, String device_class, String param = "", String
 
         if(device_class == "illuminance") {
             discovery_doc["unit_of_meas"] = "%";
-            discovery_doc["val_tpl"]      = "{{ value_json.Illuminance | float }}";
+            discovery_doc["val_tpl"]      = "{{ value_json.Lux | float }}";
+        }
+
+        if(device_class == "carbon_monoxide") {
+            discovery_doc["unit_of_meas"] = "ppm";
+            discovery_doc["val_tpl"]      = "{{ value_json.Gas | int }}";
         }
 
         if(device_class == "power") {
@@ -244,8 +251,8 @@ void config_entity(String entity, String device_class, String param = "", String
         //discovery_doc["cmd_tpl"]        = "1";                                  // command_template
         discovery_doc["stat_t"]         = "~/inform/" + param;                  // state_topic
         discovery_doc["min"]            = "0";                                  // Payload_off
-        discovery_doc["max"]            = "100";                                  // Payload_on
-        discovery_doc["mode"]           = "slider";                                  // Payload_on
+        discovery_doc["max"]            = "100";                                // Payload_on
+        discovery_doc["mode"]           = "slider";                             // Mode
     }
 
 
@@ -266,14 +273,15 @@ void config_entity(String entity, String device_class, String param = "", String
             JsonArray effects = discovery_doc.createNestedArray("fx_list");
                 effects.add("NoEFX");
                 effects.add("Auto");
-                effects.add("Flash");
-                effects.add("Fade3");
-                effects.add("Fade7");
-                effects.add("scan");
                 effects.add("Rainbow");
+                effects.add("Sad");
+                effects.add("Happy");
+                effects.add("Inspired");
+                effects.add("Relax");
+                effects.add("Hot");
+                effects.add("Cold");
         }
     }
-
 
     serializeJson(discovery_doc, discovery_jsonString);                     //Serialize JSON data to string
     //telnet_println("HASSIO Config: " + String(discovery_jsonString));

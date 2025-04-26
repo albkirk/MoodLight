@@ -4,27 +4,28 @@
 //#define ESP8285                                         // ESP8285 chip requires reduced MEM space (ex.: remove WEB page)  
 #undef ESP8266                                          // To make sure it is not used somewhere... 
 //#undef ESP32                                            // To make sure it is not used somewhere... 
-//#define ESP32C3                                         // ESP32-C3 chip differs from the ESP32.
+//#define ESP32C3                                           // ESP32-C3 chip differs from the ESP32.
+//#define ESP32S3                                           // ESP32-S3 chip differs from the ESP32.
 
 // -- HARWARE & SOFTWARE Version --
 #define BRANDName           "AlBros_Team"                 // Hardware brand name
-#define MODELName           "GenBoxESP"                   // Hardware model name
-#define SWVer               "13.17"                       // Major.Minor Software version (use String 01.00 - 99.99 format !)
+#define MODELName           "MoodLight"                   // Hardware model name
+#define SWVer               "01.01"                       // Major.Minor Software version (use String 01.00 - 99.99 format !)
 
 // -- Model Variants Definition --                        // Identify variants for acomodade small code changes 
 //-> Comment the definitions using //->
-//#define ModelVariant                                        // Ex.: MoesHouse cover, Ambisense version,... 
+//#define ModelVariant                                      // Ex.: MoesHouse cover, Ambisense version,... 
 #ifdef ModelVariant
 #else
 #endif
 
 // -- DIGITAL GPIO to Function Assignment --
-#define LED_ESP             48                            // 8266=2, ESP32=22, ESP32C3=8, T-Call=13, TTGoTS=22, T5=19, -1 means NOT used!
+#define LED_ESP             22                            // 8266=2, ESP32=22, ESP32C3=8, T-Call=13, TTGoTS=22, T5=19, -1 means NOT used!
 #define IR_PIN              -1                            // IR-LED Receiver PIN  -1 means NOT used!
 #define BUZZER              -1                            // (Active) Buzzer pin. Suggest to use pin 0. -1 means NOT used!
-#define Ext1WakeUP          -1                            // External Wake Up pin. (connected to GND, with Parallel Cap).  -1 means NOT used!
+#define BUZZER_OFF         LOW                            // (Active) Buzzer OFF state. LOW=0v, HIGH=Vcc
 #define Reset_Btn           -1                            // Reset button to return to default configuration. -1 means NOT used! 
-#define BUT_A                9                            // Button A INPUT pin (used in buttons.h) TTGoTS=35, T5=39, TTGo T7=0
+#define BUT_A                0                            // Button A INPUT pin (used in buttons.h) TTGoTS=35, T5=39, TTGo T7=0
 #define BUT_B               -1                            // Button B INPUT pin (used in buttons.h) TTGoTS=34,
 #define BUT_C               -1                            // Button C INPUT pin (used in buttons.h) TTGoTS=39,
 #define T_Left              -1                            // Touch button Left  pin. TTGoTS=T7, T5=-1, -1 means NOT used!
@@ -33,35 +34,26 @@
 //TouchPins[] = { T0, T1, T2, T3, T4, T5, T6, T7, T8, T9 };  // ALL TOUCH values available!
 //TouchPins[] = { 04, 00, 02, 15, 13, 12, 14, 27, 33, 32 };  // ALL TOUCH PIN available!
 
-// -- LED Lights GPIO & Configuration
-//#define LED_RGB                                         // Uncoment to be used by color.h library
-//#define LED_NEO                                         // Uncoment to be used by color.h library
-#define PIN_RED             -1                            // PWM Output PIN for RED  -1 means NOT used!
-#define PIN_GREEN           -1                            // PWM Output PIN for GRREN  -1 means NOT used!
-#define PIN_BLUE            -1                            // PWM Output PIN for BLUE  -1 means NOT used!
-#define NEOPixelsPIN        -1                            // NeoPixels DATA GPIO pin.
-#define NEOPixelsNUM        -1                            // Number of NeoPixels LEDs attached
 
-// -- Power Source & Battery Level --
-bool BattPowered =       false;                           // Is the device battery powered?
-#define Res_Div          false                            // Do you have a Resistor divider (ence needs to multiply by 2)?
-#define Res_High           100                            // High Resistor value (in KOhms)
-#define Res_Lower          100                            // Lower Resistor value (in KOhms)
+// -- Power, Battery & ULP --
+bool BattPowered =       true;                            // Is the device battery powered?
+#define Batt_Res_Div     false                            // Do you have a Resistor divider (ence needs to calculate the proportion)?
+#define Batt_Res_High      100                            // High Resistor value (in KOhms)
+#define Batt_Res_Lower     100                            // Lower Resistor value (in KOhms)
 #define Batt_L_Thrs         15                            // Battery level threshold [0%-100%] (before slepping forever).
-#define Using_ADC         true                            // ESP8266 only. Will you use the external ADC? (if not, it will measure the internal voltage)
-//#define IP5306                                          // Power Management chip. TTGo T-Call module uses this.
-
-// -- ADC GPIO & ULP (ESP32 Only)
-//#define ULP_Support                                       //ESP32 ULP support. ESP32-S3 and ESP32-C3 not supported.
-#ifndef ESP8266
+#ifdef ESP32
     #define Batt_ADC_PIN    -1                            // IO pin for Battery ADC measurement. Default->36,  TFT->36, EPaper->35
-    #define NTC_ADC_PIN     -1                            // IO pin for NTC ADC measurement. Default->36,  TFT->36, EPaper->35
-    #define LUX_ADC_PIN     -1                            // IO pin for LUX ADC measurement. Default->36,  TFT->36, EPaper->35
+    #if !defined(ESP32C3) && !defined(ESP32S3)
+        #define ULP_Support                               // ESP32 ULP support. ESP32-S3 and ESP32-C3 not supported.
+    #endif           
+    #define Ext1WakeUP       0                            // ESP32 External Wake Up pin. (connected to GND, with Parallel Cap).  -1 means NOT used!
+    #define Ext1WakeUP_OFF HIGH                           // External Wake Up pin OFF state. LOW=0v, HIGH=Vcc
+
 #else
-    #define Batt_ADC_PIN    A0
-    #define NTC_ADC_PIN     A0
-    #define LUX_ADC_PIN     A0    
+    #define Using_ADC     true                            // ESP8266 only. Will you use the external ADC? (if not, it will measure the internal voltage)
+    #define Batt_ADC_PIN    A0                            // ESP8266 ADC pin (Hardcoded)
 #endif
+//#define IP5306                                          // Power Management chip. TTGo T-Call module uses this.
 
 // -- SPI PIN Definition --
 #define MISO_PIN            -1                            // SPI MISO pin, , -1 means NOT used!
@@ -77,10 +69,6 @@ bool BattPowered =       false;                           // Is the device batte
 #define I2S_WS              -1                            // Microphone WS PIN 2
 #define I2S_SCK             -1                            // Microphone SCK PIN 14
 #define I2S_SD              -1                            // Microphone SD PIN 15
-
-// -- DHT Definition --
-#define DHTTYPE              2                            // use 1 for "DHT11", 2 for "DHT22", or 3 for "AM2320" to select the DHT Model
-#define DHTPIN              -1                            // GPIO connected to DHT Data PIN. -1 means NO DHT used!
 
 // -- COMUNICATION Definition --
 //Bluetooth Definition

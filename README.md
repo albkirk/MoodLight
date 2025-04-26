@@ -1,35 +1,29 @@
-# ESP32 Project "Kick Start" Template
+# ESP32 Project "MoodLight"
 
 
-This is a personal project to create a starting point for all my ESP projects.
-It is written in C++ under PlatformIO IDE (integrated on ATOM or Visual Studio Code platforms).
-I'm coding my own variant of this popular project, with some inspiration and lessons (code Snippets) from some well know projects like:
+This device aims to build a cozy, or inspirational, or emotive ambient surrounding you. For that, it uses a colorful 8x8 LED matrix to blast you with the mood.
+It finds the right mood to transmit thanks to the information acquired by the sensors: temperature, humidity, light and sound level, detected BT or WiFi devices, weather forecast, etc..
+The set of colors, the visual pattern effect and brightness intensity are selected to create the perfect ambient.
 
-- ESPURNA: [GitHub Espurna Page](https://github.com/SensorsIot/Espurna-Framework)
-- TASMOTA: [GitHub Tasmota Page](https://github.com/arendst/Sonoff-Tasmota)
+Used components: 
+	* ESP32 LilyGo T7 v1.3 SuperMini MCU,
+	* WS2812 LED 5050 RGB 8x8 64 LED Matrix,
+	* 18650 LiPo Battery
+	* TP4056 battery charger module (embeded in the T7)
+	* 1 Button (embeded in the T7)
+	* BME 280 temperature and humidity sensor*
+	* Electret Microphone module*
+	* Light sensor resistor (LDR)* 
+		(* Future integration)
 
 ## Supported Features:
-	1. Project should run locally, even when LAN (WiFi) newtork is down (it seems obvious, but ...)
-	2. Remote upgrade Over-the-Air (OTA) or/and HTTP Update.
-	3. Local Flash store configuration (ex.: DeviceName, Location, ...) 
-	4. MQTT Publish/Subscribe support
-        	4.1.  ALl data is sent under "/<clientID>/<location>/<device name>/*telemetry*/<topic name>" in string format
-        	4.2.  ALl data received sent under "/<clientID>/<location>/<device name>/*configure*/<topic name>" in string format
-	5. User commands feedback by flashing the "internal" LED and/or adittional active buzzer.
-	6. OTA, TELNET, LED, RESET, REBOOT, STORE and DEEPSLEEP functionalities can be remotely enabled/disabled/triggered via defined "true"/"false" MQTT commands.
-	7. Battery and Status sent via MQTT (with "will message" defined)
-	8. DeepSleep support with configurable On-Time(+ extended time) and Sleep-Time
-	9. Remote "Debug" using Telnet (enabled via MQTT)
-	10. Long operational live (it will be running 365 days a year, so, it recovers from Wifi or MQTT loss)
-	11. Date / Time with NTP sync
-	12. Web Page for Initial configuration
-	13. Power consumption optimization
-	14. Secure communication (https or other methods)
+	1. Device should run locally, even when LAN (WiFi) newtork is down
+	2. Auto-select the right "mood" profile, based on sensor's reading
+	3. Manual selection of "mood" profile.
+	4. Auto-OFF Timer, configurable Home Assistant (using the buttons*) and the LED matrix as "output"
+	5. Light intensity adjust based on ambient lighting
 
-## --Dependencies--
-You must install the following libraries (under arduino or Platformio)
-	1. **ArduinoJson** by Benoit Blanchon 
-	2. **PubSubClient** by Nick O'Leary 
-
-## Future features!!
-	1. WiFi "Air" sniffing for APs, Registered Stations and "Unregistered" Stations (It kinda works....)
+## Technical Requirements
+	- Define "Mood Profiles" with predifined name, color selection (may have diferent number of colors), effect pattern (Led to light-up, color to apply)
+	- Use 2 push buttons with single press, double press, and long press.
+	- Use the 8 x 8 matrix as output display, like for timer definition. Each led shall represent 1 minute. Flash green for "OK", red cross for "NOK" or "Cancel".

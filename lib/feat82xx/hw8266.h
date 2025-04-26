@@ -206,7 +206,7 @@ void esp_deepsleep(unsigned long Time_seconds = 0, unsigned long currUTime = 0 )
 float ReadVoltage(){
     if (Using_ADC) {
         float reading = analogRead(A0)/1023.0;      // converting number [0-1023] to Volts [0.0-1.000]
-        if(Res_Div) return reading * Res_High / Res_Lower + reading;
+        if(Batt_Res_Div) return reading * Batt_Res_High / Batt_Res_Lower + reading;
         else return reading;
     }   
     else return float(ESP.getVcc())/1000;           // return Vcc in Volts

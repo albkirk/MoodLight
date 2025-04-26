@@ -82,9 +82,9 @@ void flash_LED(unsigned int n_flash = 1, int fl_LED = LED_ESP, bool LED_OFF = !c
 void Buzz(unsigned int n_beeps = 1, unsigned long buzz_time = BUZZER_millis ) {
     if (BUZZER>=0) {
         for (size_t i = 0; i < n_beeps; i++) {
-            digitalWrite(BUZZER, HIGH);                 // Turn Buzzer on
+            digitalWrite(BUZZER, !BUZZER_OFF);                 // Turn Buzzer on
             delay(BUZZER_millis);
-            digitalWrite(BUZZER, LOW);                  // Turn Buzzer off
+            digitalWrite(BUZZER, BUZZER_OFF);                  // Turn Buzzer off
             yield();
             delay(BUZZER_millis);
         }
@@ -92,6 +92,7 @@ void Buzz(unsigned int n_beeps = 1, unsigned long buzz_time = BUZZER_millis ) {
 }
 
 void GoingToSleep(unsigned long deepsleeptime = SLEEPTime, String status_msg = "DeepSleep") {
+    before_GoingToSleep();
     mqtt_publish(mqtt_pathtele, "Status", status_msg);
     mqtt_disconnect();
     telnet_println("Going to sleep for " + String(deepsleeptime) + " seconds, or until next event ... zzZz :) ");
@@ -207,7 +208,7 @@ void global_setup() {
     }
     if (BUZZER>=0) {
         pinMode(BUZZER, OUTPUT);
-        digitalWrite(BUZZER, LOW);                      // initialize BUZZER off
+        digitalWrite(BUZZER, BUZZER_OFF);               // initialize BUZZER off
     }
 
   // Input GPIOs

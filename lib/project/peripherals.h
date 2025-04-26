@@ -1,26 +1,30 @@
 // Declare and define here all Peripheral (sensors and actuators) used in this project.
 // **** Periphericals definition here ...
+// -- LED Lights GPIO & Configuration
+//#define LED_RGB                                         // Uncoment to be used by color.h library
+#define LED_NEO                                         // Uncoment to be used by color.h library
+#define PIN_RED             -1                            // PWM Output PIN for RED  -1 means NOT used!
+#define PIN_GREEN           -1                            // PWM Output PIN for GREEN  -1 means NOT used!
+#define PIN_BLUE            -1                            // PWM Output PIN for BLUE  -1 means NOT used!
+#define NEOPixelsPIN        16                            // NeoPixels DATA GPIO pin.
+#define NEOPixelsNUM        64                            // Number of NeoPixels LEDs attached
+uint8_t NEO_BRIGHTNESS    = 20;                           // NEO brightness [0-255]
 
 // **** Libraries to include here ...
+#include <color.h>
 #include <buttons.h>
-//#include <touch.h>
-//#include <ambient.h>
-//#include <mygps.h>
+
 
 // **** Peripherals and critical functions here ...
 void on_wakeup() {
-/*
-    // Avoid full setup cycle if Humidity didn't changed since last read.
-    if (ESPResetReason() == "Deep-Sleep Wake" && RTC_read() )) {  // If true, I can also assume rtc.ByteValue >= 0
-        if ((rtcData.FloatValue - Humidity) <=3 && (rtcData.FloatValue - Humidity) >=-3 && rtcData.ByteValue <4) {              // No change on humidity, so back to deep-sleep
-            rtcData.ByteValue ++;
-            telnet_println("No big change on Humidity, back to deep-sleep for " + String(config.SLEEPTime) + " min, or until next event ... zzZz :) ");
-            telnet_println("Total time ON: " + String(millis()) + " msec");
-            GoingToSleep(config.SLEEPTime, rtcData.lastUTCTime);
-        };
-    };
-*/
+
 }
+
+void before_GoingToSleep() {
+    yield();
+    color_set(BLACK);
+}
+
 
 // One of the 1st functions to be called on main.cpp in order to initialize critical components,
 // such as: GPIO config, sensors, actuators, wake-up validation...  
@@ -30,13 +34,11 @@ void peripherals_setup() {
 // Input GPIOs
 
 // Setup functions
-   // Start buttons
-      buttons_setup();
-      //touch_setup();    
-  // Start Ambient devices
-      //ambient_setup();
-
+    color_setup();
 // Wake-up validation
     on_wakeup();
+
+// Setup buttons
+    buttons_setup();
 }
 
