@@ -72,13 +72,14 @@ void custom_update(){
 #endif
 
     char BLACK[8] =        "#000000";       // RGB code for BLACK or LED Strip OFF
+    char GRAY[8] =         "#151515";       // RGB code for Dark GRAY
     char WHITE[8] =        "#FFFFFF";       // RGB code for WHITE
     char RED[8] =          "#FF0000";       // RGB code for RED
     char GREEN[8] =        "#00FF00";       // RGB code for GREEN
     char BLUE[8] =         "#0000FF";       // RGB code for BLUE
-    char ORANGE[8] =       "#FFA500";       // RGB code for ORANGE
+    char ORANGE[8] =       "#FF4B00";       // RGB code for ORANGE
     char LIGHT_GREEN[8] =  "#90EE90";       // RGB code for LIGHT GREEN
-    char DEEP_BLUE[8] =    "#000080";       // RGB code for NAVY
+    char DEEP_BLUE[8] =    "#040260";       // RGB code for Deep BLUE
     char WARM_WHITE[8] =   "#FF930F";       // RGB code for ----------
     char MILK_WHITE[8] =   "#FFF0F0";       // RGB code for SNOW
     char DEEP_YELLOW[8] =  "#FFD700";       // RGB code for GOLD
@@ -87,27 +88,29 @@ void custom_update(){
     char PINK_WHITE[8] =   "#FFC0CB";       // RGB code for PINK
     char YELLOW[8] =       "#FFFF00";       // RGB code for YELLOW
     char LIGHT_BLUE[8] =   "#ADD8E6";       // RGB code for LIGHT BLUE
+    char INDIGO[8] =       "#4B0082";       // RGB code for PURPLE
     char PURPLE[8] =       "#800080";       // RGB code for PURPLE
     char GREEN_WHITE[8] =  "#E0FFE0";       // RGB code for HONEYDEW
     char LIGHT_YELLOW[8] = "#FFFFD0";       // RGB code for LIGHT YELLOW
     char SKY_BLUE[8] =     "#87CEEB";       // RGB code for SKY BLUE
-    char BROWN[8] =        "#A52A2A";       // RGB code for BROWN
+    char BROWN[8] =        "#584125";       // RGB code for BROWN
     char BLUE_WHITE[8] =   "#E0E0FF";       // RGB code for ALICE BLUE
 
     // Rainbow colors: red, orange, yellow, green, blue, indigo, and violet
-    char *rainbow[] = {ORANGE, YELLOW, GREEN, BLUE, CYAN, PURPLE, RED};
-    char *sad[] = {DEEP_BLUE, BLACK, BROWN, BLACK, MILK_WHITE, BLACK};
+    char *rainbow[] = {ORANGE, YELLOW, GREEN, BLUE, INDIGO, PURPLE, RED};
+    char *nature[] = {GREEN, LIGHT_GREEN, YELLOW, SKY_BLUE, GREEN_WHITE, LIGHT_BLUE, BLUE_WHITE};
+    //char *sad[] = {DEEP_BLUE, BLACK, BROWN, BLACK, GRAY, BLACK};
     char *happy[] = {YELLOW, GREEN, BLUE, CYAN, PURPLE, RED, ORANGE};
-    char *inspired[] = {PURPLE, RED, ORANGE, YELLOW, BLUE_PURPLE, BLUE, CYAN};
+    char *inspired[] = {PURPLE, RED, ORANGE, YELLOW, CYAN, BLUE_PURPLE, BLUE};
     char *relax[] = {PINK_WHITE, BLUE_WHITE, LIGHT_BLUE, LIGHT_YELLOW, GREEN_WHITE, WARM_WHITE};
     char *hot[] = {RED, ORANGE, PINK_WHITE, BROWN};
     char *cold[] = {CYAN, DEEP_BLUE, LIGHT_GREEN, LIGHT_BLUE, BLUE_WHITE, BLUE_PURPLE, GREEN_WHITE};
-    char **profiles[] = {rainbow, sad, happy, inspired, relax, hot, cold}; // Define all profiles
+    char **profiles[] = {rainbow, nature, happy, inspired, relax, hot, cold}; // Define all profiles
     byte num_profiles = 7;        // The number of profiles in the list (must be manually counted)
-    const String profile_names[] = {"Rainbow", "Sad", "Happy", "Inspired", "Relax", "Hot", "Cold"}; // Define all profiles
+    const String profile_names[] = {"Rainbow", "Nature", "Happy", "Inspired", "Relax", "Hot", "Cold"}; // Define all profiles
     byte profileSizes[] = {
         sizeof(rainbow) / 4,    // rainbow is the address of the first element, which is 4 bytes (32bits) long
-        sizeof(sad) / 4,
+        sizeof(nature) / 4,
         sizeof(happy) / 4,
         sizeof(inspired) / 4,
         sizeof(relax) / 4,
@@ -133,7 +136,7 @@ void custom_update(){
     bool Light_Last = false;        // [OFF / ON] Light switch  (Last state)
 // EFX
     //const String EFXName[] = {"NoEFX", "Auto", "Flash", "Fade3", "Fade7", "Scan", "Rainbow"};
-    const String EFXName[] = {"NoEFX", "Auto", "Rainbow", "Sad", "Happy", "Inspired", "Relax", "Hot", "Cold"};
+    const String EFXName[] = {"NoEFX", "Auto", "Rainbow", "Nature", "Happy", "Inspired", "Relax", "Hot", "Cold"};
     byte sizeof_EFXName = 9;        // The number of EFX in the list (must be manually counted)
     byte EFX = 0;                   // The EFX to be played
     byte EFX_Last = 0;              // The Last EFX to be played
@@ -409,8 +412,18 @@ void color_profile(byte profileIndex = 0) {
             color_set_EFX_RGB(selectedProfile[RainBow_idx]);
         }
         else {
-            int idx = random(0,3);
-            if(RGB[idx] < EFX_RGB[idx]) RGB[idx] += 1;
+            int idx = 0;
+            int min_diff = 255;
+            // Find the index of the color channel with the minimum difference
+            // between the current RGB value and the target EFX_RGB value
+            for (int i = 0; i < 3; i++) {
+                int diff = abs(RGB[i] - EFX_RGB[i]);
+                if (diff > 0 && diff <= min_diff) {
+                    min_diff = diff;
+                    idx = i;
+                }           
+            }
+            if (RGB[idx] < EFX_RGB[idx]) RGB[idx] += 1;
             else if (RGB[idx] > EFX_RGB[idx]) RGB[idx] -= 1;
             color_paint(RGB, EFX_GAIN);
         }
@@ -521,7 +534,7 @@ void color_loop() {
          mqtt_publish(mqtt_pathtele, "EFX", EFXName[EFX]);
          EFX_Last = EFX;
     }
-    // {"NoEFX", "Auto", "Rainbow", "Sad", "Happy", "Inspired", "Relax", "Hot", "Cold"}
+    // {"NoEFX", "Auto", "Rainbow", "Nature", "Happy", "Inspired", "Relax", "Hot", "Cold"}
     switch (EFX) {
         case 0:
             color_paint (RGB, GAIN);
@@ -535,7 +548,7 @@ void color_loop() {
             break;
         case 3:
             //color_Fade3();
-            color_profile(1);   // sad
+            color_profile(1);   // nature
             break;
         case 4:
             //color_Fade7();

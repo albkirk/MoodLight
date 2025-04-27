@@ -274,7 +274,7 @@ void config_entity(String entity, String device_class, String param = "", String
                 effects.add("NoEFX");
                 effects.add("Auto");
                 effects.add("Rainbow");
-                effects.add("Sad");
+                effects.add("Nature");
                 effects.add("Happy");
                 effects.add("Inspired");
                 effects.add("Relax");

@@ -16,9 +16,9 @@ void project_loop() {
     color_loop();
 
       // Button handling
-      if (A_COUNT >= 1 && A_STATUS && (millis() - Last_A > 5000)) {
+      if (A_COUNT >= 1 && A_STATUS && (millis() - Last_A > 3000)) {
         mqtt_publish(mqtt_pathtele, "PushButton", "Holded");
-        telnet_println("PushButton HOLDED for 5 seconds!!!");
+        telnet_println("PushButton HOLDED for 3 seconds!!!");
         EFX = 0;
         NEO_BRIGHTNESS = 200;
         pixels->setBrightness(NEO_BRIGHTNESS);
@@ -32,17 +32,25 @@ void project_loop() {
         flash_LED(A_COUNT);
         if (A_COUNT == 1) {
             EFX = (EFX +1) % sizeof_EFXName;
-            if (EFX >=2) {
+            color_set(BLACK);
+            delay(500);
+            RainBow_idx = 0;
+            if (EFX == 0) {
+                color_set(config.InitColor);
+            }
+            else if (EFX >=2) {
                 char **selectedProfile = profiles[EFX-2];
-                color_set(BLACK);
-                delay(100);
+                pixels->setBrightness(0);
                 color_set(selectedProfile[0]);
-                delay(500);
-                color_set(BLACK);
+                for (size_t i = 1; i <= NEO_BRIGHTNESS; i++) {
+                    pixels->setBrightness(i);
+                    color_set(selectedProfile[0]);
+                    delay(20);
+                }
             }
         }
-        if (A_COUNT == 3) GoingToSleep(0);
-        if (A_COUNT == 5) global_restart("Restarting");
+        if (A_COUNT == 2) GoingToSleep(0);
+        if (A_COUNT == 3) global_restart("Restarting");
 
         A_COUNT = 0;
     }
