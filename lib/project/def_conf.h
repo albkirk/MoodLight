@@ -10,7 +10,7 @@
 // -- HARWARE & SOFTWARE Version --
 #define BRANDName           "AlBros_Team"                 // Hardware brand name
 #define MODELName           "MoodLight"                   // Hardware model name
-#define SWVer               "01.02"                       // Major.Minor Software version (use String 01.00 - 99.99 format !)
+#define SWVer               "01.03"                       // Major.Minor Software version (use String 01.00 - 99.99 format !)
 
 // -- Model Variants Definition --                        // Identify variants for acomodade small code changes 
 //-> Comment the definitions using //->

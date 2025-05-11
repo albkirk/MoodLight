@@ -6,6 +6,7 @@ The set of colors, the visual pattern effect and brightness intensity are select
 
 (* planned integration)
 
+
 ## Used components
 
     . LilyGo T7 v1.3 ESP32 MCU,
@@ -18,13 +19,42 @@ The set of colors, the visual pattern effect and brightness intensity are select
     . Light sensor resistor (LDR), * 
         (* Future integration)
 
+
 ## Supported Features
 
-    1. Device should run locally, even when LAN (WiFi) newtork is down
-    2. Auto-select the right "mood" profile, based on sensor's reading
-    3. Manual selection of "mood" profile.
-    4. Auto-OFF Timer, configurable Home Assistant (using the buttons*) and the LED matrix as "output"
-    5. Light intensity adjust based on ambient lighting
+    1.  Single color or multi-color smooth transition,
+    2.  "mood" profiles with customizable color pallete (Hot, Cool, Nature, Inspire,...),
+    3.  Manual selection of "mood" profile,
+    4.  Selects the right "mood" profile, based on ambient data reading,*
+    5.  Auto-OFF Timer, configurable using Home Assistant, using the buttons* with the LED matrix as "Display",*
+    6.  Light intensity adjust manually, or based on ambient light,*
+    7.  Flashlight (Long press Mode Button),
+    8.  Works everywhere, regardless of Wi-Fi newtork availability,
+    9.  [Home Assistant](https://www.home-assistant.io) integration,
+    10. [WLED](https://kno.wled.ge) compatible.
+        (* Future integration)
+
+
+## Used components
+
+    - LilyGo T7 v1.3 ESP32 MCU,
+    - WS2812b LED 5050 RGB 8x8 64 LED Matrix,
+    - 18650 LiPo battery,
+    - TP4056 battery charger module (embeded in the T7),
+    - 1 Button (embeded in the T7),
+    - AHT10 temperature and humidity sensor, *
+    - Electret Microphone module, *
+    - Light sensor resistor (LDR), * 
+        (* Future integration)
+
+
+## PinOut
+
+    ESP32   |   WS2812b
+    5v      |   V+
+    GND     |   V-
+    IO16    |   In 
+
 
 ## Technical Requirements
 
@@ -38,8 +68,16 @@ The set of colors, the visual pattern effect and brightness intensity are select
 
     - Handy flash light (White color full brightness)
 
+
 ## Case
 https://cad.onshape.com/documents/a11340a8b514efb50a936062/w/a1de64b26606eb292ac9daf7/e/f47711be4b7f09a631f87059
 
+*STL Files*:
+[ - Front -](Media/Mood-Front.stl)
+[- Back -](Media/Mood-Back.stl)
+[- Matrix -](Media/Mood-Matrix.stl)
+[- Mode Button -](Media/Mood-Mode.stl)
+[- PWR Switch -](Media/Mood-PWR.stl)
 
-![3D View](image.png)
+<img src="Media/Foto%20Display.jpg" alt="Foto Display" style="width: 50%;">
+<img src="Media/Complete%20Wiring.jpg" alt="Complete Wiring" style="width: 50%;">
