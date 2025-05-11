@@ -10,7 +10,7 @@
 // -- HARWARE & SOFTWARE Version --
 #define BRANDName           "AlBros_Team"                 // Hardware brand name
 #define MODELName           "MoodLight"                   // Hardware model name
-#define SWVer               "01.03"                       // Major.Minor Software version (use String 01.00 - 99.99 format !)
+#define SWVer               "01.04"                       // Major.Minor Software version (use String 01.00 - 99.99 format !)
 
 // -- Model Variants Definition --                        // Identify variants for acomodade small code changes 
 //-> Comment the definitions using //->
@@ -20,7 +20,7 @@
 #endif
 
 // -- DIGITAL GPIO to Function Assignment --
-#define LED_ESP             22                            // 8266=2, ESP32=22, ESP32C3=8, T-Call=13, TTGoTS=22, T5=19, -1 means NOT used!
+#define LED_ESP             -1                            // 8266=2, ESP32=22, ESP32C3=8, T-Call=13, TTGoTS=22, T5=19, -1 means NOT used!
 #define IR_PIN              -1                            // IR-LED Receiver PIN  -1 means NOT used!
 #define BUZZER              -1                            // (Active) Buzzer pin. Suggest to use pin 0. -1 means NOT used!
 #define BUZZER_OFF         LOW                            // (Active) Buzzer OFF state. LOW=0v, HIGH=Vcc

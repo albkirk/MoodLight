@@ -6,20 +6,6 @@ The set of colors, the visual pattern effect and brightness intensity are select
 
 (* planned integration)
 
-
-## Used components
-
-    . LilyGo T7 v1.3 ESP32 MCU,
-    . WS2812 LED 5050 RGB 8x8 64 LED Matrix,
-    . 1x 18650 LiPo battery,
-    . TP4056 battery charger module (embeded in the T7),
-    . 1 Button (embeded in the T7),
-    . BME 280 temperature and humidity sensor, *
-    . Electret Microphone module, *
-    . Light sensor resistor (LDR), * 
-        (* Future integration)
-
-
 ## Supported Features
 
     1.  Single color or multi-color smooth transition,
@@ -54,7 +40,6 @@ The set of colors, the visual pattern effect and brightness intensity are select
     5v      |   V+
     GND     |   V-
     IO16    |   In 
-
 
 ## Technical Requirements
 
